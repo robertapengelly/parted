@@ -1,0 +1,22 @@
+#******************************************************************************
+# @file             Makefile.pdw
+#******************************************************************************
+AS=aswin
+CC=gccwin
+LD=ldwin
+
+COPTS=-S -O2 -fno-common -ansi -I. -I../pdos/pdpclib -D__WIN32__ -D__NOBIVA__ -D__PDOS__
+COBJ=lib.o parted.o report.o write7x.o
+
+all: clean parted.exe
+
+parted.exe: $(COBJ)
+  $(LD) -s -o parted.exe ../pdos/pdpclib/w32start.o $(COBJ) ../pdos/pdpclib/msvcrt.a
+
+.c.o:
+  $(CC) $(COPTS) $<
+  $(AS) -o $@ $*.s
+  rm -f $*.s
+
+clean:
+  rm -f *.o parted.exe

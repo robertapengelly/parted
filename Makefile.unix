@@ -1,0 +1,26 @@
+#******************************************************************************
+# @file             Makefile.unix
+#******************************************************************************
+SRCDIR              ?=  $(CURDIR)
+VPATH               :=  $(SRCDIR)
+
+CC                  :=  gcc
+CFLAGS              :=  -D_FILE_OFFSET_BITS=64 -Wall -Werror -Wextra -std=c90
+
+CSRC                :=  lib.c parted.c report.c write7x.c
+
+ifeq ($(OS), Windows_NT)
+all: parted.exe
+
+parted.exe: $(CSRC)
+	$(CC) $(CFLAGS) -o $@ $^
+else
+all: parted
+
+parted: $(CSRC)
+	$(CC) $(CFLAGS) -o $@ $^
+endif
+
+clean:
+	if [ -f parted.exe ]; then rm -rf parted.exe; fi
+	if [ -f parted ]; then rm -rf parted; fi

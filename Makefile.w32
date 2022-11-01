@@ -1,0 +1,19 @@
+#******************************************************************************
+# @file             Makefile.w32
+#******************************************************************************
+SRCDIR              ?=  $(CURDIR)
+VPATH               :=  $(SRCDIR)
+
+CC                  :=  gcc
+CFLAGS              :=  -D_FILE_OFFSET_BITS=64 -Wall -Werror -Wextra -std=c90
+
+CSRC                :=  lib.c parted.c report.c write7x.c
+
+all: parted.exe
+
+clean:
+	if exist parted.exe ( del /q parted.exe )
+	if exist parted ( del /q parted )
+
+parted.exe: $(CSRC)
+	$(CC) $(CFLAGS) -o $@ $^
