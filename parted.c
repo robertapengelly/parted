@@ -383,6 +383,7 @@ int main (int argc, char **argv) {
     
     }
     
+    state->image_size += 512;
     state->image_size += sizeof (footer);
     
     if ((ofp = fopen (state->outfile, "r+b")) == NULL) {
@@ -423,7 +424,7 @@ int main (int argc, char **argv) {
     }
     
     fseek (ofp, 0, SEEK_END);
-    flen = ftell (ofp);
+    flen = (size_t) ftell (ofp);
     
     if (flen < state->image_size) {
     
@@ -473,7 +474,7 @@ int main (int argc, char **argv) {
     
     get_random_bytes (footer.identifier, sizeof (footer.identifier));
     
-    write741_to_byte_array (footer.modified_time, time (NULL) + 946684800, 0);
+    write741_to_byte_array (footer.modified_time, time (NULL) - 946684800, 0);
     write741_to_byte_array (footer.checksum, generate_checksum ((unsigned char *) &footer, sizeof (footer)), 0);
     
     if (fseek (ofp, state->image_size - sizeof (footer), SEEK_SET)) {

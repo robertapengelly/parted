@@ -427,7 +427,7 @@ void parse_args (int *pargc, char ***pargv, int optind) {
                 
                 }
                 
-                part->start = (unsigned int) conversion;
+                part->start = (size_t) conversion;
                 
                 p2 = skip_whitespace (p2);
                 p1 = p2;
@@ -459,18 +459,19 @@ void parse_args (int *pargc, char ***pargv, int optind) {
                 
                 }
                 
-                part->end = (unsigned int) conversion;
-                size = (part->start + part->end) * 512;
+                part->end = (size_t) conversion;
                 
-                if (size < 0) {
+                if (part->end < part->start) {
                 
-                    report_at (program_name, 0, REPORT_ERROR, "partition start must be greater than partition end");
+                    report_at (program_name, 0, REPORT_ERROR, "partition end must be greater than partition start");
                     exit (EXIT_FAILURE);
                 
                 }
                 
-                if ((long) state->image_size < size) {
-                    state->image_size = size;
+                size = (part->start + part->end) * 512;
+                
+                if (state->image_size < (size_t) size) {
+                    state->image_size = (size_t) size;
                 }
                 
                 dynarray_add (&state->parts, &state->nb_parts, part);

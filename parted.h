@@ -4,14 +4,14 @@
 #ifndef     _PARTED_H
 #define     _PARTED_H
 
+#include    <stddef.h>
+
 struct part_info {
 
     int status, type;
-    unsigned int start, end;
+    size_t start, end;
 
 };
-
-#include    <stddef.h>
 
 struct parted_state {
 
